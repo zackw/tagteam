@@ -23,7 +23,15 @@
     - else
       .text-right
         = render partial: 'shared/paginate', object: @bookmark_collections, as: :results
+      .media-left
       %ul.hub_feeds.list-unstyled.nicely-padded{:id => "hub_feed_list_#{@hub.id}"}
+        %li
+          = link_to '', class: 'bookmark-collections-toggler' do
+            .media
+              .media-left
+                = fa_icon('caret-right')
+              .media-body
+                %h2 Toggle details
         = render partial: 'hub_feeds/list_item', collection: @bookmark_collections, as: :hub_feed
       .text-center
         = render partial: 'shared/paginate', object: @bookmark_collections, as: :results
