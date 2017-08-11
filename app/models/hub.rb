@@ -214,7 +214,8 @@ class Hub < ApplicationRecord
 
   def settings
     {
-      tags_delimiter: tags_delimiter_with_default
+      tags_delimiter: tags_delimiter_with_default,
+      bookmarklet_empty_description_reminder: bookmarklet_empty_description_reminder
     }
   end
 

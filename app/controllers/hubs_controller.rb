@@ -129,7 +129,10 @@ class HubsController < ApplicationController
 
     @settings = @hub.settings
 
-    render layout: request.xhr? ? false : 'tabs'
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render json: @settings }
+    end
   end
 
   def add_roles
@@ -203,6 +206,7 @@ class HubsController < ApplicationController
 
   def set_settings
     @hub.tags_delimiter = params[:tags_delimiter]
+    @hub.bookmarklet_empty_description_reminder = params[:bookmarklet_empty_description_reminder]
 
     if @hub.save
       flash[:notice] = 'Saved successfully.'

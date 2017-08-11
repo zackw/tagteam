@@ -352,7 +352,9 @@
       $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
         $.initHubFeedItemTagList($(this).val(), feedItemId);
+        $.setEmptyDescriptionNotification();
       });
+      $.setEmptyDescriptionNotification();
     },
     initBookmarklet: function(feedItemId){
       $('#feed_item_bookmark_collection_id_input').hide();
@@ -364,6 +366,36 @@
         changeDay: true,
         yearRange: 'c-500',
         dateFormat: 'yy-mm-dd'
+      });
+
+      var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
+      itemForm.on('submit', function (e) {
+        if(itemForm.data('notify-empty-description-reminder') === true && !$('#feed_item_description_input iframe').contents().find('body').text()) {
+          var response = confirm('Description is empty. Do you want to continue?');
+
+          if (response === false) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    },
+    setEmptyDescriptionNotification: function () {
+      $.ajax({
+        url: $.rootPath() + 'hubs/' + $('#feed_item_hub_id').val() + '/settings',
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+          var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
+          var notify = false;
+
+          if (response.bookmarklet_empty_description_reminder === 'on') {
+            notify = true;
+          }
+
+          itemForm.data('notify-empty-description-reminder', notify);
+        }
       });
     },
     checkPlaceholders: function(){

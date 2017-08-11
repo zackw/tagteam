@@ -14,11 +14,19 @@
     <div class="col-md-12">
       <%= form_tag(set_settings_hub_path(@hub)) do %>
         <ul class="list-unstyled">
-          <li>
+          <li class="settings-element">
             <%= label_tag 'tags_delimiter', 'Tags delimiter' %>
             <div class="row">
               <div class="col-md-12">
                 <%= text_field_tag('tags_delimiter', @settings[:tags_delimiter], {id: 'tags_delimiter'}) %>
+              </div>
+            </div>
+          </li>
+          <li class="settings-element">
+            <%= label_tag 'bookmarklet_empty_description_reminder', 'Inform users about the empty description field in the bookmarklet form' %>
+            <div class="row">
+              <div class="col-md-12">
+                <%= check_box_tag('bookmarklet_empty_description_reminder', @settings[:bookmarklet_empty_description_reminder], @settings[:bookmarklet_empty_description_reminder], { id: 'bookmarklet_empty_description_reminder' }) %>
               </div>
             </div>
           </li>
