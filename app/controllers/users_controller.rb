@@ -8,6 +8,9 @@ class UsersController < ApplicationController
                                          :tags_atom]
   before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
                                       :tags_atom]
+  before_action :set_selected_role, only: :roles_on
+  before_action :set_roles_on, only: :roles_on
+
   after_action :verify_authorized
 
   def tags
@@ -49,14 +52,6 @@ class UsersController < ApplicationController
   end
 
   def roles_on
-    @roles_on = @user.roles
-                     .select([:authorizable_type, :authorizable_id])
-                     .includes(:authorizable)
-                     .where(authorizable_type: params[:roles_on])
-                     .group(:authorizable_type, :authorizable_id)
-                     .order(:authorizable_type, :authorizable_id)
-                     .paginate(page: params[:page], per_page: get_per_page)
-
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default, json: @roles_on, root: :role }
@@ -163,5 +158,23 @@ class UsersController < ApplicationController
 
     @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
                           .paginate(page: params[:page], per_page: get_per_page)
+  end
+
+  def set_selected_role
+    available_roles = @user.things_i_have_roles_on.map(&:to_s)
+
+    raise "Unknown role on \"#{params[:roles_on]}\"" unless available_roles.include?(params[:roles_on])
+
+    @selected_role = params[:roles_on]
+  end
+
+  def set_roles_on
+    @roles_on = @user.roles
+                     .select(%i[authorizable_type authorizable_id])
+                     .includes(:authorizable)
+                     .where(authorizable_type: @selected_role)
+                     .group(:authorizable_type, :authorizable_id)
+                     .order(:authorizable_type, :authorizable_id)
+                     .paginate(page: params[:page], per_page: get_per_page)
   end
 end

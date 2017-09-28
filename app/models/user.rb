@@ -36,7 +36,15 @@ class User < ApplicationRecord
   end
 
   def things_i_have_roles_on
-    roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')", 'owner']).group(:authorizable_type).collect(&:authorizable_type).sort.collect(&:constantize)
+    roles
+      .where(name: 'owner')
+      .where.not(authorizable_id: nil)
+      .pluck(:authorizable_type)
+      .uniq
+      .compact
+      .sort
+      .without('Feed')
+      .map(&:constantize)
   end
 
   # Looks for objects of the class_of_interest owned by this user.
