@@ -1,7 +1,7 @@
 .nicely-padded
   - if @hub_feed.feed.is_bookmarking_feed?
     %h3 Title:
-    = @hub_feed.feed.title
+    = @hub_feed.title
     - unless @hub_feed.display_description.blank?
       %h3 Description:
       = sanitize @hub_feed.display_description
