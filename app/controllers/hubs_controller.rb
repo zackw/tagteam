@@ -21,7 +21,8 @@ class HubsController < ApplicationController
     :request_rights,
     :retrievals,
     :search,
-    :show
+    :show,
+    :remove_delimiter
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
@@ -60,7 +61,8 @@ class HubsController < ApplicationController
     :approve_tag,
     :unapprove_tag,
     :deprecate_tag,
-    :undeprecate_tag
+    :undeprecate_tag,
+    :remove_delimiter
   ]
 
   protect_from_forgery except: :items
@@ -805,6 +807,20 @@ class HubsController < ApplicationController
       flash[:notice] = 'Successfully undeprecated.'
       redirect_to hub_tags_path(@hub)
     end
+  end
+
+  def remove_delimiter
+    authorize @hub
+
+    if @hub.tags_delimiter.include?(params[:delimiter])
+      flash[:notice] = "Delimiter removed successfully"
+      @hub.tags_delimiter.delete(params[:delimiter])
+      @hub.save
+    else  
+      flash[:error] = "Something went wrong, try again."
+    end
+
+    return redirect_to settings_hub_path(@hub)
   end
 
   private
