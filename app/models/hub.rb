@@ -250,7 +250,7 @@ class Hub < ApplicationRecord
   end
 
   def tags_delimiter_with_default
-    tags_delimiter || ','
+    tags_delimiter.present? ? tags_delimiter : [',']
   end
 
   def official_tag_prefix_with_default
