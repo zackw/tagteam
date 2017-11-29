@@ -187,6 +187,8 @@ Rails.application.routes.draw do
     end
     
     resources :users, only: :index
+
+    resources :settings, only: %i[new create update]
   end
 
   root 'hubs#home'
