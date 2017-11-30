@@ -1,0 +1,17 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'messaging' }
+- content_for :tab_content do
+  .nicely-padded
+    - if @errors.present?
+      .error
+        = @errors
+    #contact
+      %h1 Send message to hub members
+      = semantic_form_for(:message, url: hub_messages_path(@hub)) do |f|
+        = f.inputs do
+          = f.input :subject, required: true
+          = f.input :body, as: :text, input_html: { rows: 8 }
+        = f.actions do
+          = f.action :submit, as: :button, label: 'Submit', button_html: { class: 'btn btn-primary' }

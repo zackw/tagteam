@@ -17,6 +17,7 @@
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
 //= require bootstrap-sprockets
+//= require select2
 //= require_tree .
 //
 ( function($){

@@ -42,6 +42,7 @@ gem 'unicorn', '~> 4.9'
 gem 'whenever', '~> 0.9'
 gem 'will_paginate', '~> 3.1'
 gem 'will_paginate-bootstrap', '~> 1.0'
+gem 'select2-rails'
 
 group :development do
   gem 'brakeman', '~> 3.6'
