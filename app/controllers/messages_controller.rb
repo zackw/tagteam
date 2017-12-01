@@ -9,8 +9,9 @@ class MessagesController < ApplicationController
   end
 
   def create
-    message = Messages::Create.run(hub: @hub, subject: params[:message][:subject], body: params[:message][:body])
-    if message.valid?
+    @message = Messages::Create.run(hub: @hub, subject: params[:message][:subject], body: params[:message][:body])
+    
+    if @message.valid?
       flash[:notice] = 'Your message has sent sucessfully'
     else
       flash[:error] = 'Something went wrong, try again.'

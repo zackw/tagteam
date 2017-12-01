@@ -10,8 +10,20 @@
     #contact
       %h1 Send message to hub members
       = semantic_form_for(:message, url: hub_messages_path(@hub)) do |f|
+
         = f.inputs do
+          = select_tag "count", options_for_select(@hub.users_with_roles.map(&:email)), multiple: true, class: 'form-control chosen-select col-md-12'
           = f.input :subject, required: true
           = f.input :body, as: :text, input_html: { rows: 8 }
         = f.actions do
           = f.action :submit, as: :button, label: 'Submit', button_html: { class: 'btn btn-primary' }
+
+      :javascript
+        $(function() {
+          return $('.chosen-select').chosen({
+            allow_single_deselect: true,
+            no_results_text: 'No results matched',
+            width: '800px'
+          });
+        });
+    
